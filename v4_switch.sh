@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+: \
+	"${KATAPULT_HOME:?Missing katapult home path}"
+
+function fail {
+	echo "$@" >&2
+	exit 1
+}
+
 echo "-------------------------------------------------------------"
 echo "Cartographer V4 Firmware Switch"
 echo "-------------------------------------------------------------"
@@ -55,8 +63,7 @@ echo ""
 echo "-------------------------------------------------------------"
 echo "Switching your Cartographer v4 to CAN (1,000,000) firmware..."
 echo "-------------------------------------------------------------"
-test -e ~/katapult && (cd ~/katapult && git pull) || (cd ~ && git clone https://github.com/Arksine/katapult)
-cd ~
+test -d "$KATAPULT_HOME" || fail "Katapult repository not found"
 
 echo "-------------------------------------------------------------"
 echo "Detecting your Cartographer device..."
@@ -147,7 +154,7 @@ echo "Copy this into your Clipboard and once you have plugged your probe in via 
 echo ""
 echo ""
 echo -e "\033[0;32mcd ~/cartographer_firmware/firmware/v4/firmware/6.0.0/\033[0m"
-echo -e "\033[0;32mpython3 ~/katapult/scripts/flash_can.py -i can0 -f $FIRMWARE_FILE -u $DEVICE_UUID\033[0m"
+echo -e "\033[0;32mpython3 \"$KATAPULT_HOME\"/scripts/flash_can.py -i can0 -f $FIRMWARE_FILE -u $DEVICE_UUID\033[0m"
 echo ""
 echo ""You can also run the commands automatically if you are not rebooting the printer.
 echo "-------------------------------------------------------------"
@@ -167,7 +174,7 @@ if [ -n "$DEVICE_UUID" ]; then
 			echo ""
 			if [[ $REPLY =~ ^[Yy]$ ]]; then
 				echo "Flashing firmware via CAN..."
-				python3 ~/katapult/scripts/flash_can.py -i can0 -f "$FIRMWARE_FILE" -u "$DEVICE_UUID"
+				python3 "$KATAPULT_HOME"/scripts/flash_can.py -i can0 -f "$FIRMWARE_FILE" -u "$DEVICE_UUID"
 				echo ""
 				echo "-------------------------------------------------------------"
 				echo "Flash complete!"
