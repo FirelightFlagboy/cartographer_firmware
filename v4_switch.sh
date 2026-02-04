@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 : \
-	"${KATAPULT_HOME:?Missing katapult home path}"
+	"${KATAPULT_HOME:?Missing katapult home path}" \
+	"${KLIPPER_SCRIPT_DIR:?Missing klipper home path}"
 
 function fail {
 	echo "$@" >&2
@@ -105,9 +106,7 @@ else
 fi
 echo "-------------------------------------------------------------"
 
-cd ~/klipper/scripts
-sleep 5
-~/klippy-env/bin/python -c "import flash_usb as u; u.enter_bootloader('$CARTOGRAPHER_DEVICE')"
+PYTHONPATH=$KLIPPER_SCRIPT_DIR python -c "import flash_usb as u; u.enter_bootloader('$CARTOGRAPHER_DEVICE')"
 
 echo "Waiting for device to enter bootloader mode..."
 KATAPULT_DEVICE=""
