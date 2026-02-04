@@ -110,12 +110,12 @@ PYTHONPATH=$KLIPPER_SCRIPT_DIR python -c "import flash_usb as u; u.enter_bootloa
 
 echo "Waiting for device to enter bootloader mode..."
 KATAPULT_DEVICE=""
-for i in {1..10}; do
-	sleep 1
-	KATAPULT_DEVICE=$(ls /dev/serial/by-id/*katapult* 2>/dev/null | head -n1)
+for _i in {1..10}; do
+	KATAPULT_DEVICE=$(find /dev/serial/by-id -name '*katapult*' 2>/dev/null | head -n1)
 	if [ -n "$KATAPULT_DEVICE" ]; then
 		break
 	fi
+	sleep 1
 done
 
 if [ -z "$KATAPULT_DEVICE" ]; then
