@@ -70,7 +70,7 @@ echo "-------------------------------------------------------------"
 echo "Detecting your Cartographer device..."
 echo "-------------------------------------------------------------"
 
-CARTOGRAPHER_DEVICE=$(ls /dev/serial/by-id/usb-Cartographer_stm32g431xx_* 2>/dev/null | head -n1)
+CARTOGRAPHER_DEVICE=$(find /dev/serial/by-id -name 'usb-Cartographer_stm32g431xx_*' 2>/dev/null | head -n1)
 
 if [ -z "$CARTOGRAPHER_DEVICE" ]; then
 	clear
@@ -79,6 +79,7 @@ if [ -z "$CARTOGRAPHER_DEVICE" ]; then
 	echo "Is the device connected via USB?"
 	echo "Is this a Cartographer v4 device?"
 	echo "-------------------------------------------------------------"
+	# shellcheck disable=SC2162
 	read -p "Press Enter to exit..."
 	exit 1
 fi
@@ -123,6 +124,7 @@ if [ -z "$KATAPULT_DEVICE" ]; then
 	echo "-------------------------------------------------------------"
 	echo "Please check if the device entered bootloader mode correctly."
 	echo "-------------------------------------------------------------"
+	# shellcheck disable=SC2162
 	read -p "Press Enter to exit..."
 	exit 1
 fi
