@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 : \
 	"${KATAPULT_HOME:?Missing katapult home path}" \
-	"${KLIPPER_SCRIPT_DIR:?Missing klipper home path}" \
+	"${KLIPPER_DIR:?Missing klipper home path}" \
 	"${CARTOGRAPHER_FIRMWARES_DIR:?Missing firwares dir}"
 
 function fail {
@@ -108,7 +108,7 @@ else
 fi
 echo "-------------------------------------------------------------"
 
-PYTHONPATH=$KLIPPER_SCRIPT_DIR python -c "import flash_usb as u; u.enter_bootloader('$CARTOGRAPHER_DEVICE')"
+PYTHONPATH=$KLIPPER_DIR/scripts python -c "import flash_usb as u; u.enter_bootloader('$CARTOGRAPHER_DEVICE')"
 
 echo "Waiting for device to enter bootloader mode..."
 KATAPULT_DEVICE=""
@@ -133,7 +133,7 @@ fi
 echo "Your Katapult device is: $KATAPULT_DEVICE"
 echo "-------------------------------------------------------------"
 
-~/klippy-env/bin/python ~/klipper/lib/canboot/flash_can.py -f "$CARTOGRAPHER_DEVICE"/v4/katapult_deployer_v4_CAN_1M.bin -d "$KATAPULT_DEVICE"
+python "$KLIPPER_DIR"/lib/canboot/flash_can.py -f "$CARTOGRAPHER_DEVICE"/v4/katapult_deployer_v4_CAN_1M.bin -d "$KATAPULT_DEVICE"
 clear
 echo -e "\033[1;31mPlease unplug the USB probe and re-install it in CAN mode.\033[0m"
 echo ""
